@@ -1,11 +1,9 @@
-
-
 import pg from "pg";
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const {Pool} = pg;
+const { Pool } = pg;
 
 export const pool = new Pool({
   user: process.env.DB_USER,
@@ -13,10 +11,9 @@ export const pool = new Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   database: process.env.DB_NAME,
-})
-
-
+  ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
+});
 
 pool.query("SELECT NOW()")
-  .then((res) =>console.log("✅ DB connected at:", res.rows[0].now))
+  .then((res) => console.log("✅ DB connected at:", res.rows[0].now))
   .catch((err) => console.log("❌ DB connection failed:", err.message));
